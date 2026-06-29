@@ -12,18 +12,15 @@ public class NarrativeClickManager : MonoBehaviour
 
     public float clickDistance = 5f;
 
-    private NarrativeItem currentItem;
+    private bool isInteractionLocked = false;
 
     void Update()
     {
+        if (isInteractionLocked) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             TryClickObject();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseCurrentItem();
         }
     }
 
@@ -38,27 +35,21 @@ public class NarrativeClickManager : MonoBehaviour
 
             if (item != null)
             {
-                CloseCurrentItem();
+                isInteractionLocked = true;
 
-                currentItem = item;
-                currentItem.Inspect(inspectPoint, narrationPanel, narrationText, audioSource);
+                item.Inspect(
+                    inspectPoint,
+                    narrationPanel,
+                    narrationText,
+                    audioSource,
+                    OnItemFinished
+                );
             }
         }
     }
 
-    void CloseCurrentItem()
+    void OnItemFinished()
     {
-        if (currentItem != null)
-        {
-            currentItem.CloseInspect();
-            currentItem = null;
-        }
-
-        narrationPanel.SetActive(false);
-
-        if (audioSource != null)
-        {
-            audioSource.Stop();
-        }
+        isInteractionLocked = false;
     }
 }

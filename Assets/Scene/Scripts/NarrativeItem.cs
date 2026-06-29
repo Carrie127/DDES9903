@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 using System.Collections;
 
 public class NarrativeItem : MonoBehaviour
@@ -12,6 +13,7 @@ public class NarrativeItem : MonoBehaviour
 
     [Header("Timing")]
     public float defaultLineDuration = 2.5f;
+    public float delayAfterFinished = 0.5f;
 
     [Header("Inspect Settings")]
     public bool moveToInspectPoint = false;
@@ -28,6 +30,8 @@ public class NarrativeItem : MonoBehaviour
     private bool hasRegistered = false;
     private Coroutine narrationCoroutine;
 
+    public bool IsPlaying { get; private set; } = false;
+
     private void Start()
     {
         originalPosition = transform.position;
@@ -35,9 +39,14 @@ public class NarrativeItem : MonoBehaviour
         originalScale = transform.localScale;
     }
 
-    public void Inspect(Transform inspectPoint, GameObject panel, TMP_Text textBox, AudioSource audioSource)
+    public void Inspect(Transform inspectPoint, GameObject panel, TMP_Text textBox, AudioSource audioSource, Action onFinished)
     {
-        panel.SetActive(true);
+        if (IsPlaying) return;
+
+        IsPlaying = true;
+
+        if (panel != null)
+            panel.SetActive(true);
 
         if (moveToInspectPoint && inspectPoint != null)
         {
@@ -48,24 +57,17 @@ public class NarrativeItem : MonoBehaviour
         }
 
         if (narrationCoroutine != null)
-        {
             StopCoroutine(narrationCoroutine);
-        }
 
-        narrationCoroutine = StartCoroutine(PlayNarrationLines(textBox, audioSource));
-
-        if (!hasRegistered && progressManager != null)
-        {
-            hasRegistered = true;
-            progressManager.RegisterItemClicked();
-        }
+        narrationCoroutine = StartCoroutine(PlayNarrationLines(textBox, audioSource, panel, onFinished));
     }
 
-    private IEnumerator PlayNarrationLines(TMP_Text textBox, AudioSource audioSource)
+    private IEnumerator PlayNarrationLines(TMP_Text textBox, AudioSource audioSource, GameObject panel, Action onFinished)
     {
         for (int i = 0; i < narrationLines.Length; i++)
         {
-            textBox.text = narrationLines[i];
+            if (textBox != null)
+                textBox.text = narrationLines[i];
 
             if (audioSource != null)
             {
@@ -75,7 +77,6 @@ public class NarrativeItem : MonoBehaviour
                 {
                     audioSource.clip = narrationAudios[i];
                     audioSource.Play();
-
                     yield return new WaitForSeconds(narrationAudios[i].length + 0.3f);
                 }
                 else
@@ -88,16 +89,28 @@ public class NarrativeItem : MonoBehaviour
                 yield return new WaitForSeconds(defaultLineDuration);
             }
         }
-    }
 
-    public void CloseInspect()
-    {
-        if (narrationCoroutine != null)
+        yield return new WaitForSeconds(delayAfterFinished);
+
+        ReturnToOriginal();
+
+        if (panel != null)
+            panel.SetActive(false);
+
+        IsPlaying = false;
+        narrationCoroutine = null;
+
+        if (!hasRegistered && progressManager != null)
         {
-            StopCoroutine(narrationCoroutine);
-            narrationCoroutine = null;
+            hasRegistered = true;
+            progressManager.RegisterItemClicked();
         }
 
+        onFinished?.Invoke();
+    }
+
+    private void ReturnToOriginal()
+    {
         if (isInspecting)
         {
             transform.position = originalPosition;

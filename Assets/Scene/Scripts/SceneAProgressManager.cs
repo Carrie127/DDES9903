@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
@@ -12,18 +13,20 @@ public class SceneAProgressManager : MonoBehaviour
     [Header("UI")]
     public GameObject narrationPanel;
     public TMP_Text narrationText;
-    public GameObject blackScreen;
+    public Image blackScreen;
+    public GameObject tbcText;
 
     [Header("Audio")]
-    public AudioSource miaVoiceAudio;   // Mia says "...Evie..."
-    public AudioSource rumbleAudio;     // room shaking / low rumble sound
+    public AudioSource miaVoiceAudio;
+    public AudioSource rumbleAudio;
 
-    [Header("Lighting")]
+    [Header("Light")]
     public Light sceneLight;
 
     [Header("Timing")]
     public float normalLineDuration = 2.5f;
-    public float importantLineDuration = 3.2f;
+    public float endingLineDuration = 2.8f;
+    public float fadeDuration = 5f;
 
     public void RegisterItemClicked()
     {
@@ -100,49 +103,64 @@ public class SceneAProgressManager : MonoBehaviour
             if (narrationText != null)
                 narrationText.text = line;
 
-            yield return new WaitForSeconds(importantLineDuration);
+            yield return new WaitForSeconds(endingLineDuration);
         }
-
-        // Mia's distant voice: "...Evie..."
-        if (miaVoiceAudio != null)
-            miaVoiceAudio.Play();
-
-        yield return new WaitForSeconds(2.5f);
-
-        if (narrationText != null)
-            narrationText.text = "Who's there...?";
-
-        yield return new WaitForSeconds(2.5f);
-
-        if (narrationText != null)
-            narrationText.text = "Did someone just...";
-
-        yield return new WaitForSeconds(2.5f);
-
-        if (narrationText != null)
-            narrationText.text = "call my name...?";
-
-        yield return new WaitForSeconds(2.5f);
 
         if (rumbleAudio != null)
             rumbleAudio.Play();
 
         StartCoroutine(FlickerLight());
+        StartCoroutine(FadeToBlack());
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.2f);
 
-        if (blackScreen != null)
-            blackScreen.SetActive(true);
-
-        yield return new WaitForSeconds(1f);
+        if (miaVoiceAudio != null)
+            miaVoiceAudio.Play();
 
         if (narrationText != null)
-            narrationText.text = "No...";
-
+            narrationText.text = "Who's there...?";
         yield return new WaitForSeconds(2.5f);
 
         if (narrationText != null)
-            narrationText.text = "Not again.";
+            narrationText.text = "Did someone just...";
+        yield return new WaitForSeconds(2.5f);
+
+        if (narrationText != null)
+            narrationText.text = "call my name...?";
+        yield return new WaitForSeconds(2.5f);
+
+        if (narrationPanel != null)
+            narrationPanel.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+
+        if (tbcText != null)
+            tbcText.SetActive(true);
+    }
+
+    private IEnumerator FadeToBlack()
+    {
+        if (blackScreen == null)
+            yield break;
+
+        blackScreen.gameObject.SetActive(true);
+
+        Color c = blackScreen.color;
+        c.a = 0f;
+        blackScreen.color = c;
+
+        float timer = 0f;
+
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            c.a = Mathf.Clamp01(timer / fadeDuration);
+            blackScreen.color = c;
+            yield return null;
+        }
+
+        c.a = 1f;
+        blackScreen.color = c;
     }
 
     private IEnumerator FlickerLight()
@@ -150,10 +168,10 @@ public class SceneAProgressManager : MonoBehaviour
         if (sceneLight == null)
             yield break;
 
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 18; i++)
         {
             sceneLight.enabled = !sceneLight.enabled;
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.12f);
         }
 
         sceneLight.enabled = true;
