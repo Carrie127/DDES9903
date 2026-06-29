@@ -34,7 +34,7 @@ public class NarrativeClickManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, clickDistance))
         {
-            NarrativeItem item = hit.collider.GetComponent<NarrativeItem>();
+            NarrativeItem item = hit.collider.GetComponentInParent<NarrativeItem>();
 
             if (item != null)
             {

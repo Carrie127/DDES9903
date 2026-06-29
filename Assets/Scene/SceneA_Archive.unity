@@ -359,9 +359,11 @@ MonoBehaviour:
   narrationLines:
   - 'The hands stopped... '
   - 7:42.
-  - Was that...
-  - when everything happened?
+  - The same time...
+  - again.
+  - Why does this number feel so important...?
   narrationAudios:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -369,6 +371,7 @@ MonoBehaviour:
   defaultLineDuration: 2.5
   moveToInspectPoint: 0
   inspectScale: 1.5
+  progressManager: {fileID: 261345407}
 --- !u!1 &23411916
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +665,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 736678889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &120207011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 120207012}
+  m_Layer: 0
+  m_Name: Archive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &120207012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120207011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 18.39885, y: 4.90335, z: -1.68602}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1952263074}
+  - {fileID: 7457159945624359002}
+  - {fileID: 736678889}
+  - {fileID: 1338001478}
+  - {fileID: 264000261}
+  - {fileID: 1340588467}
+  - {fileID: 1374377681}
+  - {fileID: 782958074}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &122051037 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9182882645681806097, guid: 2753221a8a8499949a2ba74123b9ac78, type: 3}
@@ -829,6 +871,59 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241148941}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &261345406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 261345408}
+  - component: {fileID: 261345407}
+  m_Layer: 0
+  m_Name: SceneA_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &261345407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261345406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d068a5ff8ace2648b515bc9b78b7ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneAProgressManager
+  totalItems: 5
+  narrationPanel: {fileID: 1640265181}
+  narrationText: {fileID: 1769770785}
+  blackScreen: {fileID: 0}
+  miaVoiceAudio: {fileID: 1310486761}
+  rumbleAudio: {fileID: 0}
+  sceneLight: {fileID: 0}
+  normalLineDuration: 2.5
+  importantLineDuration: 3.2
+--- !u!4 &261345408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261345406}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.78439, y: 4.26696, z: 9.13837}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &264000260
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,8 +948,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 264000260}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.3588074, z: -0, w: 0.9334116}
-  m_LocalPosition: {x: 11.504857, y: 2.7654002, z: 8.129215}
+  m_LocalRotation: {x: -0, y: -0.35880744, z: -0, w: 0.93341166}
+  m_LocalPosition: {x: -6.8939924, y: -2.1379497, z: 9.815235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -867,7 +962,7 @@ Transform:
   - {fileID: 2033003936}
   - {fileID: 1723554188}
   - {fileID: 1500735212}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 120207012}
   m_LocalEulerAnglesHint: {x: 0, y: -42.054, z: 0}
 --- !u!1 &276544847
 GameObject:
@@ -1449,10 +1544,12 @@ MonoBehaviour:
   narrationLines:
   - 'A teddy bear? '
   - It's...
-  - kind of warm.
+  - kind of worn out..
   - Why...
+  - Why does it feel so familiar...?
   - Why does holding this make me feel so sad...?
   narrationAudios:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -1461,6 +1558,7 @@ MonoBehaviour:
   defaultLineDuration: 2.5
   moveToInspectPoint: 0
   inspectScale: 1.5
+  progressManager: {fileID: 261345407}
 --- !u!1 &472689958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2411,8 +2509,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736678888}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.5, y: 7.04, z: -4.32854}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.8988495, y: 2.13665, z: -2.64252}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2435,7 +2533,7 @@ Transform:
   - {fileID: 472689962}
   - {fileID: 1600994959}
   - {fileID: 1252172951}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 120207012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &740550175
 GameObject:
@@ -2759,7 +2857,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 120207012}
     m_Modifications:
     - target: {fileID: 6462200965888993302, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_Name
@@ -2767,7 +2865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.1715627
+      value: 2.1715624
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalScale.y
@@ -2775,19 +2873,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.1715627
+      value: 2.1715624
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.3
+      value: -2.0988503
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.81
+      value: -2.09335
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.99
+      value: 12.67602
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2822,6 +2920,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+--- !u!4 &782958074 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+  m_PrefabInstance: {fileID: 782958073}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &783599021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3459,8 +3562,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3504,7 +3607,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -4641,10 +4744,8 @@ MonoBehaviour:
   - Ten years ago...
   - One child...
   - ...died in the fire.
-  - Why...
   - Why does reading this make me feel so uneasy...?
   narrationAudios:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -4653,6 +4754,7 @@ MonoBehaviour:
   defaultLineDuration: 2.5
   moveToInspectPoint: 1
   inspectScale: 1.5
+  progressManager: {fileID: 261345407}
 --- !u!1 &1252172947
 GameObject:
   m_ObjectHideFlags: 0
@@ -5091,13 +5193,142 @@ Transform:
   m_Children: []
   m_Father: {fileID: 264000261}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 14.949}
+--- !u!1 &1310486760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1310486762}
+  - component: {fileID: 1310486761}
+  m_Layer: 0
+  m_Name: MiaVoice_Audio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1310486761
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310486760}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1310486762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310486760}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.71, y: 4.946, z: 7.12}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1338001477
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 120207012}
     m_Modifications:
     - target: {fileID: 333860568258334047, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5133,19 +5364,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.22
+      value: -4.178849
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.69
+      value: -2.2133498
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.96
+      value: 10.64602
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9137363
+      value: 0.91373634
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5153,7 +5384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.40630776
+      value: 0.4063078
       objectReference: {fileID: 0}
     - target: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
       propertyPath: m_LocalRotation.z
@@ -5180,13 +5411,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
+--- !u!4 &1338001478 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5910324942899239284, guid: 7225c814dcde09243bda4a3e0d8a2ce5, type: 3}
+  m_PrefabInstance: {fileID: 1338001477}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1340588466
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 120207012}
     m_Modifications:
     - target: {fileID: 3249098536486386984, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5218,15 +5454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.11
+      value: -7.28885
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.48
+      value: -1.4233499
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.02
+      value: 8.70602
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5273,6 +5509,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+--- !u!4 &1340588467 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+  m_PrefabInstance: {fileID: 1340588466}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1345720764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 331554805834479197, guid: cc979301ead36a64bad5cf0ad5a0d78d, type: 3}
@@ -5641,11 +5882,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NarrativeItem
   narrationLines:
-  - 'A drawing? '
+  - 'A drawing...? '
   - A child drew this...
-  - It's so simple...
+  - and a teddy bear.
+  - Why can't I stop looking at it...?
   - Why can't I stop looking at it...?
   narrationAudios:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -5653,13 +5896,14 @@ MonoBehaviour:
   defaultLineDuration: 2.5
   moveToInspectPoint: 0
   inspectScale: 1.5
+  progressManager: {fileID: 261345407}
 --- !u!1001 &1374377680
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 120207012}
     m_Modifications:
     - target: {fileID: 3249098536486386984, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5691,15 +5935,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.96
+      value: -5.4388494
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.81
+      value: -2.09335
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.61
+      value: 1.07602
       objectReference: {fileID: 0}
     - target: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5746,6 +5990,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+--- !u!4 &1374377681 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6462200965888993309, guid: 160123f654dcc72479bb5b8514d61835, type: 3}
+  m_PrefabInstance: {fileID: 1374377680}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1392362974
 GameObject:
   m_ObjectHideFlags: 0
@@ -6927,7 +7176,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640265181}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7502,6 +7751,7 @@ MonoBehaviour:
   defaultLineDuration: 2.5
   moveToInspectPoint: 0
   inspectScale: 1.5
+  progressManager: {fileID: 0}
 --- !u!114 &1732641758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7517,6 +7767,7 @@ MonoBehaviour:
   narrationLines:
   - This room...
   - It was completely destroyed.
+  - The fire must have spread so fast...
   - Why do I feel like...
   - I've seen this before?
   narrationAudios:
@@ -7524,9 +7775,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   defaultLineDuration: 2.5
   moveToInspectPoint: 1
   inspectScale: 1.5
+  progressManager: {fileID: 261345407}
 --- !u!1001 &1750404763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8172,12 +8425,12 @@ Transform:
   m_GameObject: {fileID: 1952263072}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.28, y: 6.01, z: 8.16}
+  m_LocalPosition: {x: -10.11885, y: 1.1066504, z: 9.84602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1430377059}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 120207012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1987666345 stripped
 RectTransform:
@@ -9004,7 +9257,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 120207012}
     m_Modifications:
     - target: {fileID: 7457159944228665141, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -9036,15 +9289,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.7388
+      value: -9.660049
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.66
+      value: -2.2433498
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.7454
+      value: 5.43142
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9052,15 +9305,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7457159944530478001, guid: e6333e629ba3a9e41b09e24be44ecbbc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -9345,16 +9598,9 @@ SceneRoots:
   - {fileID: 175610515}
   - {fileID: 1129437298}
   - {fileID: 1087300323}
+  - {fileID: 120207012}
   - {fileID: 1355144603}
   - {fileID: 3457217213512515936}
-  - {fileID: 1952263074}
-  - {fileID: 7457159945624359001}
-  - {fileID: 736678889}
-  - {fileID: 1338001477}
-  - {fileID: 264000261}
-  - {fileID: 1340588466}
-  - {fileID: 1374377680}
-  - {fileID: 782958073}
   - {fileID: 7755260542540449732}
   - {fileID: 783599021}
   - {fileID: 800207412}
@@ -9365,8 +9611,14 @@ SceneRoots:
   - {fileID: 421189083}
   - {fileID: 1750404763}
   - {fileID: 1037556190}
+  - {fileID: 1310486762}
   - {fileID: 1235920152}
   - {fileID: 4079824710247116792}
+  - {fileID: 1372673634}
+  - {fileID: 1732641756}
+  - {fileID: 14442620}
+  - {fileID: 1278172008}
+  - {fileID: 952400152}
   - {fileID: 7753128974671573424}
   - {fileID: 5769188604402964697}
   - {fileID: 679429071}
@@ -9378,8 +9630,4 @@ SceneRoots:
   - {fileID: 1365928207}
   - {fileID: 1672716521}
   - {fileID: 409640224}
-  - {fileID: 1372673634}
-  - {fileID: 1732641756}
-  - {fileID: 14442620}
-  - {fileID: 1278172008}
-  - {fileID: 952400152}
+  - {fileID: 261345408}

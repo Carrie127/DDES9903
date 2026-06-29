@@ -17,11 +17,15 @@ public class NarrativeItem : MonoBehaviour
     public bool moveToInspectPoint = false;
     public float inspectScale = 1.5f;
 
+    [Header("Scene Progress")]
+    public SceneAProgressManager progressManager;
+
     private Vector3 originalPosition;
     private Quaternion originalRotation;
     private Vector3 originalScale;
 
     private bool isInspecting = false;
+    private bool hasRegistered = false;
     private Coroutine narrationCoroutine;
 
     private void Start()
@@ -49,6 +53,12 @@ public class NarrativeItem : MonoBehaviour
         }
 
         narrationCoroutine = StartCoroutine(PlayNarrationLines(textBox, audioSource));
+
+        if (!hasRegistered && progressManager != null)
+        {
+            hasRegistered = true;
+            progressManager.RegisterItemClicked();
+        }
     }
 
     private IEnumerator PlayNarrationLines(TMP_Text textBox, AudioSource audioSource)
