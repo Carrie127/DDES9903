@@ -56,6 +56,9 @@ public class OpeningNarration : MonoBehaviour
         narrationText.text = "Why does this place feel so... familiar?";
         yield return new WaitForSeconds(3f);
 
+        narrationText.text = "Maybe... I should look around.";
+        yield return new WaitForSeconds(2.8f);
+
         narrationPanel.SetActive(false);
 
         if (playerController != null)
