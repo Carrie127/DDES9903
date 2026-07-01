@@ -33,7 +33,7 @@ public class SceneAProgressManager : MonoBehaviour
     [Header("Timing")]
     public float normalLineDuration = 2.5f;
     public float endingLineDuration = 2.8f;
-    public float fadeDuration = 4f;
+    public float fadeDuration = 5f;
 
     public void RegisterItemClicked()
     {
@@ -111,54 +111,53 @@ public class SceneAProgressManager : MonoBehaviour
             yield return new WaitForSeconds(endingLineDuration);
         }
 
-        // Door opens
+        if (narrationPanel != null)
+            narrationPanel.SetActive(false);
+
+        StartCoroutine(OpenDoor());
+
+        yield return new WaitForSeconds(0.8f);
+
         if (miaWarmLight != null)
             miaWarmLight.SetActive(true);
 
         if (miaPointLight != null)
             miaPointLight.gameObject.SetActive(true);
 
-        StartCoroutine(OpenDoor());
+        yield return new WaitForSeconds(1.2f);
 
-        yield return new WaitForSeconds(2.2f);
-
-        // Mia calls Evie
         if (miaVoiceAudio != null)
             miaVoiceAudio.Play();
 
+        if (narrationPanel != null)
+            narrationPanel.SetActive(true);
+
         if (narrationText != null)
             narrationText.text = "...Evie...";
-
         yield return new WaitForSeconds(2.8f);
 
         if (narrationText != null)
             narrationText.text = "Who's there...?";
-
         yield return new WaitForSeconds(2.5f);
 
         if (narrationText != null)
             narrationText.text = "How do you know my name?";
-
         yield return new WaitForSeconds(3f);
 
         if (narrationText != null)
             narrationText.text = "...Come with me.";
-
         yield return new WaitForSeconds(3f);
 
         if (narrationText != null)
             narrationText.text = "Why...";
-
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2.3f);
 
         if (narrationText != null)
             narrationText.text = "Why does this place feel...";
-
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.8f);
 
         if (narrationText != null)
-            narrationText.text = "like home?";
-
+            narrationText.text = "...like home?";
         yield return new WaitForSeconds(3f);
 
         StartCoroutine(FadeToBlack());
