@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 
 public class SceneAProgressManager : MonoBehaviour
@@ -11,54 +10,36 @@ public class SceneAProgressManager : MonoBehaviour
     private bool endingStarted = false;
 
     [Header("UI")]
-    public GameObject narrationPanel;
-    public TMP_Text narrationText;
     public Image blackScreen;
     public GameObject tbcText;
 
-    [Header("Audio")]
-    public AudioSource miaVoiceAudio;
-    public AudioSource rumbleAudio;
+    [Header("Ending Audio")]
+    public AudioSource finalRealisationAudio; // Evie: I think...
+    public AudioSource miaEvieAudio;          // Mia: Evie...
+    public AudioSource evieReplyAudio;        // Evie: Who's there + How do you know...
+    public AudioSource miaComeWithMeAudio;    // Mia: Come with me
+    public AudioSource doorOpenAudio;         // Door sound
+    public AudioSource endingEvieAudio;       // Evie: Why... like home?
 
     [Header("Door Ending")]
     public Transform doorTransform;
     public Vector3 doorOpenRotation = new Vector3(0f, 90f, 0f);
     public float doorOpenDuration = 3f;
-    public GameObject miaWarmLight;
-    public Light miaPointLight;
 
-    [Header("Light")]
-    public Light sceneLight;
+    [Header("Mia Light")]
+    public GameObject miaLight;
 
     [Header("Timing")]
-    public float normalLineDuration = 2.5f;
-    public float endingLineDuration = 2.8f;
     public float fadeDuration = 5f;
+    public float pauseAfterFinalRealisation = 0.8f;
+    public float pauseAfterMiaEvie = 0.8f;
+    public float pauseBeforeDoorOpen = 0.5f;
+    public float pauseAfterDoorOpen = 1.2f;
+    public float pauseBeforeFade = 1.2f;
 
     public void RegisterItemClicked()
     {
         clickedItems++;
-
-        if (clickedItems == 2)
-        {
-            StartCoroutine(PlayProgressDialogue(new string[]
-            {
-                "Wait...",
-                "These things...",
-                "They feel connected somehow.",
-                "But I don't understand why..."
-            }));
-        }
-
-        if (clickedItems == 4)
-        {
-            StartCoroutine(PlayProgressDialogue(new string[]
-            {
-                "No...",
-                "Something is wrong.",
-                "This doesn't feel like someone else's story..."
-            }));
-        }
 
         if (clickedItems >= totalItems && !endingStarted)
         {
@@ -67,108 +48,56 @@ public class SceneAProgressManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayProgressDialogue(string[] lines)
-    {
-        yield return new WaitForSeconds(1f);
-
-        if (narrationPanel != null)
-            narrationPanel.SetActive(true);
-
-        foreach (string line in lines)
-        {
-            if (narrationText != null)
-                narrationText.text = line;
-
-            yield return new WaitForSeconds(normalLineDuration);
-        }
-
-        if (narrationPanel != null)
-            narrationPanel.SetActive(false);
-    }
-
     private IEnumerator EndingSequence()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
-        if (narrationPanel != null)
-            narrationPanel.SetActive(true);
+        yield return PlayAudioAndWait(finalRealisationAudio);
+        yield return new WaitForSeconds(pauseAfterFinalRealisation);
 
-        string[] endingLines =
-        {
-            "I think...",
-            "I know what happened here.",
-            "The girl...",
-            "...never made it out.",
-            "So...",
-            "this is the truth..."
-        };
+        yield return PlayAudioAndWait(miaEvieAudio);
+        yield return new WaitForSeconds(pauseAfterMiaEvie);
 
-        foreach (string line in endingLines)
-        {
-            if (narrationText != null)
-                narrationText.text = line;
+        yield return PlayAudioAndWait(evieReplyAudio);
 
-            yield return new WaitForSeconds(endingLineDuration);
-        }
+        yield return PlayAudioAndWait(miaComeWithMeAudio);
+        yield return new WaitForSeconds(pauseBeforeDoorOpen);
 
-        if (narrationPanel != null)
-            narrationPanel.SetActive(false);
+        if (doorOpenAudio != null)
+            doorOpenAudio.Play();
 
         StartCoroutine(OpenDoor());
 
         yield return new WaitForSeconds(0.8f);
 
-        if (miaWarmLight != null)
-            miaWarmLight.SetActive(true);
+        if (miaLight != null)
+            miaLight.SetActive(true);
 
-        if (miaPointLight != null)
-            miaPointLight.gameObject.SetActive(true);
+        yield return new WaitForSeconds(pauseAfterDoorOpen);
 
-        yield return new WaitForSeconds(1.2f);
+        yield return PlayAudioAndWait(endingEvieAudio);
 
-        if (miaVoiceAudio != null)
-            miaVoiceAudio.Play();
+        yield return new WaitForSeconds(pauseBeforeFade);
 
-        if (narrationPanel != null)
-            narrationPanel.SetActive(true);
+        yield return StartCoroutine(FadeToBlack());
 
-        if (narrationText != null)
-            narrationText.text = "...Evie...";
-        yield return new WaitForSeconds(2.8f);
-
-        if (narrationText != null)
-            narrationText.text = "Who's there...?";
-        yield return new WaitForSeconds(2.5f);
-
-        if (narrationText != null)
-            narrationText.text = "How do you know my name?";
-        yield return new WaitForSeconds(3f);
-
-        if (narrationText != null)
-            narrationText.text = "...Come with me.";
-        yield return new WaitForSeconds(3f);
-
-        if (narrationText != null)
-            narrationText.text = "Why...";
-        yield return new WaitForSeconds(2.3f);
-
-        if (narrationText != null)
-            narrationText.text = "Why does this place feel...";
-        yield return new WaitForSeconds(2.8f);
-
-        if (narrationText != null)
-            narrationText.text = "...like home?";
-        yield return new WaitForSeconds(3f);
-
-        StartCoroutine(FadeToBlack());
-
-        yield return new WaitForSeconds(fadeDuration + 0.5f);
-
-        if (narrationPanel != null)
-            narrationPanel.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
 
         if (tbcText != null)
             tbcText.SetActive(true);
+    }
+
+    private IEnumerator PlayAudioAndWait(AudioSource audio)
+    {
+        if (audio == null || audio.clip == null)
+            yield break;
+
+        audio.Play();
+
+        while (audio.isPlaying)
+            yield return null;
+
+        yield return new WaitForSeconds(0.25f);
     }
 
     private IEnumerator OpenDoor()
