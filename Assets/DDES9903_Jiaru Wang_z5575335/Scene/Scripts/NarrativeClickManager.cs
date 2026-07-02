@@ -1,15 +1,10 @@
 using UnityEngine;
-using TMPro;
 
 public class NarrativeClickManager : MonoBehaviour
 {
     public Camera playerCamera;
     public Transform inspectPoint;
-
-    public GameObject narrationPanel;
-    public TMP_Text narrationText;
     public AudioSource audioSource;
-
     public float clickDistance = 5f;
 
     private bool isInteractionLocked = false;
@@ -39,8 +34,6 @@ public class NarrativeClickManager : MonoBehaviour
 
                 item.Inspect(
                     inspectPoint,
-                    narrationPanel,
-                    narrationText,
                     audioSource,
                     OnItemFinished
                 );

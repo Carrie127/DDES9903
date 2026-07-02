@@ -1,18 +1,18 @@
 using UnityEngine;
-using TMPro;
 using System;
 using System.Collections;
 
 public class NarrativeItem : MonoBehaviour
 {
-    [Header("Narrative Lines")]
-    [TextArea(2, 4)]
-    public string[] narrationLines;
+    [Header("Audio")]
+    public AudioClip evidenceAudio;
 
-    public AudioClip[] narrationAudios;
+    [Header("Evidence Note")]
+    public GameObject evidenceNote;
+    public float noteDelay = 0.3f;
 
     [Header("Timing")]
-    public float defaultLineDuration = 2.5f;
+    public float defaultAudioDuration = 6f;
     public float delayAfterFinished = 0.5f;
 
     [Header("Inspect Settings")]
@@ -28,7 +28,7 @@ public class NarrativeItem : MonoBehaviour
 
     private bool isInspecting = false;
     private bool hasRegistered = false;
-    private Coroutine narrationCoroutine;
+    private Coroutine playCoroutine;
 
     public bool IsPlaying { get; private set; } = false;
 
@@ -37,16 +37,16 @@ public class NarrativeItem : MonoBehaviour
         originalPosition = transform.position;
         originalRotation = transform.rotation;
         originalScale = transform.localScale;
+
+        if (evidenceNote != null)
+            evidenceNote.SetActive(false);
     }
 
-    public void Inspect(Transform inspectPoint, GameObject panel, TMP_Text textBox, AudioSource audioSource, Action onFinished)
+    public void Inspect(Transform inspectPoint, AudioSource audioSource, Action onFinished)
     {
         if (IsPlaying) return;
 
         IsPlaying = true;
-
-        if (panel != null)
-            panel.SetActive(true);
 
         if (moveToInspectPoint && inspectPoint != null)
         {
@@ -56,49 +56,49 @@ public class NarrativeItem : MonoBehaviour
             isInspecting = true;
         }
 
-        if (narrationCoroutine != null)
-            StopCoroutine(narrationCoroutine);
+        if (playCoroutine != null)
+            StopCoroutine(playCoroutine);
 
-        narrationCoroutine = StartCoroutine(PlayNarrationLines(textBox, audioSource, panel, onFinished));
+        playCoroutine = StartCoroutine(PlayEvidence(audioSource, onFinished));
     }
 
-    private IEnumerator PlayNarrationLines(TMP_Text textBox, AudioSource audioSource, GameObject panel, Action onFinished)
+    private IEnumerator PlayEvidence(AudioSource audioSource, Action onFinished)
     {
-        for (int i = 0; i < narrationLines.Length; i++)
+        yield return new WaitForSeconds(noteDelay);
+
+        if (evidenceNote != null)
+            evidenceNote.SetActive(true);
+
+        float waitTime = defaultAudioDuration;
+
+        if (audioSource != null && evidenceAudio != null)
         {
-            if (textBox != null)
-                textBox.text = narrationLines[i];
-
-            if (audioSource != null)
-            {
-                audioSource.Stop();
-
-                if (narrationAudios != null && i < narrationAudios.Length && narrationAudios[i] != null)
-                {
-                    audioSource.clip = narrationAudios[i];
-                    audioSource.Play();
-                    yield return new WaitForSeconds(narrationAudios[i].length + 0.3f);
-                }
-                else
-                {
-                    yield return new WaitForSeconds(defaultLineDuration);
-                }
-            }
-            else
-            {
-                yield return new WaitForSeconds(defaultLineDuration);
-            }
+            audioSource.Stop();
+            audioSource.clip = evidenceAudio;
+            audioSource.Play();
+            waitTime = evidenceAudio.length;
         }
 
+        yield return new WaitForSeconds(waitTime);
         yield return new WaitForSeconds(delayAfterFinished);
+
+        if (evidenceNote != null)
+        {
+            EvidenceNoteEffect effect = evidenceNote.GetComponent<EvidenceNoteEffect>();
+
+            if (effect != null)
+            {
+                effect.Hide();
+                yield return new WaitForSeconds(effect.fadeDuration);
+            }
+
+            evidenceNote.SetActive(false);
+        }
 
         ReturnToOriginal();
 
-        if (panel != null)
-            panel.SetActive(false);
-
         IsPlaying = false;
-        narrationCoroutine = null;
+        playCoroutine = null;
 
         if (!hasRegistered && progressManager != null)
         {
