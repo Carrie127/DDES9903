@@ -1,19 +1,16 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class HospitalExitTransitionTrigger : MonoBehaviour
 {
-    [Header("White Screen")]
-    public CanvasGroup whiteScreen;
-
-    [Header("Transition Timing")]
-    public float whiteFadeDuration = 1.5f;
-    public float holdWhiteDuration = 0.3f;
+    [Header("Scene Transition")]
+    public MemorySceneTransition sceneTransition;
 
     [Header("Scene Names")]
-    public string orphanageSceneName = "Scene_Orphanage";
-    public string memorySpaceSceneName = "Memory Space";
+    public string orphanageSceneName =
+        "Scene_Orphanage";
+
+    public string memorySpaceSceneName =
+        "Scene_MemorySpace";
 
     [Header("Editor Testing")]
     [Tooltip("Only used when no real MemoryRouteState has been set.")]
@@ -26,17 +23,15 @@ public class HospitalExitTransitionTrigger : MonoBehaviour
     public bool editorFallbackHospitalFirst = true;
 
     [Header("Debug")]
-    [SerializeField] private bool hasTriggered = false;
+    [SerializeField]
+    private bool hasTriggered = false;
+
 
     private void Start()
     {
-        if (whiteScreen != null)
-        {
-            whiteScreen.alpha = 0f;
-        }
-
         ApplyEditorFallbackIfNeeded();
     }
+
 
     // =====================================================
     // Editor / direct-scene testing fallback
@@ -44,8 +39,8 @@ public class HospitalExitTransitionTrigger : MonoBehaviour
 
     private void ApplyEditorFallbackIfNeeded()
     {
-        // IMPORTANT:
-        // If a real route already exists, do absolutely nothing.
+        // If a real route already exists,
+        // do not overwrite it.
         if (MemoryRouteState.CurrentRoute !=
             MemoryRouteState.MemoryRoute.None)
         {
@@ -57,7 +52,6 @@ public class HospitalExitTransitionTrigger : MonoBehaviour
             return;
         }
 
-        // No real route exists.
         if (!useEditorFallbackRoute)
         {
             Debug.LogWarning(
@@ -85,8 +79,9 @@ public class HospitalExitTransitionTrigger : MonoBehaviour
         }
     }
 
+
     // =====================================================
-    // Trigger
+    // Exit Trigger
     // =====================================================
 
     private void OnTriggerEnter(Collider other)
@@ -97,114 +92,65 @@ public class HospitalExitTransitionTrigger : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        hasTriggered = true;
-
-        Debug.Log(
-            "HOSPITAL EXIT TRANSITION TRIGGERED"
-        );
-
-        StartCoroutine(
-            TransitionSequence()
-        );
-    }
-
-    // =====================================================
-    // Transition
-    // =====================================================
-
-    private IEnumerator TransitionSequence()
-    {
-        // ---------------------------------------------
-        // 1. Fade to white
-        // ---------------------------------------------
-
-        if (whiteScreen != null)
+        if (sceneTransition == null)
         {
-            float startAlpha =
-                whiteScreen.alpha;
-
-            float timer = 0f;
-
-            if (whiteFadeDuration <= 0f)
-            {
-                whiteScreen.alpha = 1f;
-            }
-            else
-            {
-                while (timer < whiteFadeDuration)
-                {
-                    timer += Time.deltaTime;
-
-                    float t =
-                        Mathf.Clamp01(
-                            timer / whiteFadeDuration
-                        );
-
-                    float smoothT =
-                        Mathf.SmoothStep(
-                            0f,
-                            1f,
-                            t
-                        );
-
-                    whiteScreen.alpha =
-                        Mathf.Lerp(
-                            startAlpha,
-                            1f,
-                            smoothT
-                        );
-
-                    yield return null;
-                }
-
-                whiteScreen.alpha = 1f;
-            }
-        }
-
-        Debug.Log(
-            "HOSPITAL WHITE TRANSITION COMPLETE"
-        );
-
-        // ---------------------------------------------
-        // 2. Hold full white briefly
-        // ---------------------------------------------
-
-        if (holdWhiteDuration > 0f)
-        {
-            yield return new WaitForSeconds(
-                holdWhiteDuration
+            Debug.LogWarning(
+                "HOSPITAL EXIT: MemorySceneTransition is missing!"
             );
+
+            return;
         }
 
-        // ---------------------------------------------
-        // 3. Decide destination from route
-        // ---------------------------------------------
+        string targetScene = "";
+
+        // -------------------------------------------------
+        // Hospital First
+        // Archive → Hospital → Orphanage
+        // -------------------------------------------------
 
         if (MemoryRouteState.IsHospitalFirst())
         {
-            Debug.Log(
-                "HOSPITAL FIRST ROUTE → LOADING ORPHANAGE"
-            );
+            targetScene =
+                orphanageSceneName;
 
-            SceneManager.LoadScene(
-                orphanageSceneName
+            Debug.Log(
+                "HOSPITAL FIRST ROUTE → ORPHANAGE"
             );
         }
+
+        // -------------------------------------------------
+        // Orphanage First
+        // Archive → Orphanage → Hospital → Memory Space
+        // -------------------------------------------------
+
         else if (MemoryRouteState.IsOrphanageFirst())
         {
-            Debug.Log(
-                "ORPHANAGE FIRST ROUTE → LOADING MEMORY SPACE"
-            );
+            targetScene =
+                memorySpaceSceneName;
 
-            SceneManager.LoadScene(
-                memorySpaceSceneName
+            Debug.Log(
+                "ORPHANAGE FIRST ROUTE → MEMORY SPACE"
             );
         }
+
         else
         {
             Debug.LogWarning(
                 "HOSPITAL EXIT: MEMORY ROUTE HAS NOT BEEN SET!"
             );
+
+            return;
         }
+
+        hasTriggered = true;
+
+        // -------------------------------------------------
+        // Use the shared white transition system
+        // Fade In → Load Scene → Fade Out
+        // -------------------------------------------------
+
+        sceneTransition.StartTransitionTo(
+            targetScene
+        );
     }
 }

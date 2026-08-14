@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/DDES9903_Jiaru Wang_z5575335/Scene/Scene_Orphanage.unity
     guid: dc59479dd9cbb1a44883397f5aa70ae5
   - enabled: 1
-    path: Assets/DDES9903_Jiaru Wang_z5575335/Scene/Memory Space.unity
+    path: Assets/DDES9903_Jiaru Wang_z5575335/Scene/Scene_MemorySpace.unity
     guid: 1f5f29aa921dea14cb98ff38a6c9e102
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
