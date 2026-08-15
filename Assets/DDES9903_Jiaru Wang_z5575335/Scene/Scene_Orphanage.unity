@@ -9209,7 +9209,7 @@ MonoBehaviour:
   mia742Fragment: {fileID: 8300000, guid: 8a8d86c8587b1f8468dbedb9faaacc46, type: 3}
   endingEvieSource: {fileID: 722433596}
   orphanageFirstEndingClip: {fileID: 8300000, guid: 78f2dceb38a9b32449b0676421c804aa, type: 3}
-  hospitalFirstEndingClip: {fileID: 0}
+  hospitalFirstEndingClip: {fileID: 8300000, guid: d29bae515330de44b83c6b12c2bffd22, type: 3}
   sceneTransition: {fileID: 1104567834}
   hospitalSceneName: Scene_Hospital
   memorySpaceSceneName: Scene_MemorySpace
@@ -20635,6 +20635,8 @@ MonoBehaviour:
   fadeInDuration: 1.5
   holdWhiteDuration: 0.2
   fadeOutDuration: 1.5
+  postLoadHoldSceneName: Scene_Hospital
+  postLoadWhiteHoldDuration: 2.5
 --- !u!4 &1104567835
 Transform:
   m_ObjectHideFlags: 0

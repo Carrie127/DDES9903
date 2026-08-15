@@ -17,6 +17,13 @@ public class MemorySceneTransition : MonoBehaviour
     public float holdWhiteDuration = 0.2f;
     public float fadeOutDuration = 1.5f;
 
+    [Header("Destination Intro Hold")]
+    [Tooltip("Only this destination scene will hold on full white after loading.")]
+    public string postLoadHoldSceneName = "Scene_Hospital";
+
+    [Tooltip("How long to remain fully white after the destination scene loads.")]
+    public float postLoadWhiteHoldDuration = 2.2f;
+
     private bool transitionStarted = false;
     private string sceneToLoad;
 
@@ -50,10 +57,6 @@ public class MemorySceneTransition : MonoBehaviour
 
     // =====================================================
     // TRANSITION WHILE WAITING FOR AUDIO TO FINISH
-    //
-    // minimumTimeBeforeLoad:
-    // how long the current scene must remain alive
-    // before the new scene is allowed to load.
     // =====================================================
 
     public void StartTransitionTo(
@@ -96,10 +99,6 @@ public class MemorySceneTransition : MonoBehaviour
             + sceneToLoad
         );
 
-        // -------------------------------------------------
-        // Make this controller survive scene loading
-        // -------------------------------------------------
-
         DontDestroyOnLoad(gameObject);
 
         GameObject canvasRoot = null;
@@ -112,8 +111,6 @@ public class MemorySceneTransition : MonoBehaviour
                 .root
                 .gameObject;
 
-            // If Canvas is a different root object,
-            // keep it alive too.
             if (canvasRoot != gameObject)
             {
                 DontDestroyOnLoad(canvasRoot);
@@ -151,8 +148,7 @@ public class MemorySceneTransition : MonoBehaviour
         }
 
         // -------------------------------------------------
-        // 3. If dialogue is still finishing,
-        //    remain white until enough time has passed
+        // 3. Wait for current-scene dialogue if necessary
         // -------------------------------------------------
 
         float elapsed =
@@ -169,7 +165,7 @@ public class MemorySceneTransition : MonoBehaviour
         }
 
         // -------------------------------------------------
-        // 4. Brief full-white hold
+        // 4. Brief full-white hold BEFORE load
         // -------------------------------------------------
 
         if (holdWhiteDuration > 0f)
@@ -192,11 +188,34 @@ public class MemorySceneTransition : MonoBehaviour
             sceneToLoad
         );
 
-        // Allow the newly loaded scene to render once
+        // Let destination scene initialise.
+        // Hospital Intro AudioSource can now Play On Awake.
         yield return null;
 
         // -------------------------------------------------
-        // 6. Fade OUT from white in the new scene
+        // 6. SPECIAL POST-LOAD WHITE HOLD
+        //
+        // Hospital is already loaded and its intro audio
+        // is playing, but the screen remains fully white.
+        // -------------------------------------------------
+
+        if (
+            postLoadWhiteHoldDuration > 0f &&
+            sceneToLoad == postLoadHoldSceneName
+        )
+        {
+            Debug.Log(
+                "HOLDING WHITE FOR DESTINATION INTRO → "
+                + sceneToLoad
+            );
+
+            yield return new WaitForSeconds(
+                postLoadWhiteHoldDuration
+            );
+        }
+
+        // -------------------------------------------------
+        // 7. Fade OUT from white in the new scene
         // -------------------------------------------------
 
         if (whiteScreenCanvasGroup != null)
@@ -217,7 +236,7 @@ public class MemorySceneTransition : MonoBehaviour
         );
 
         // -------------------------------------------------
-        // 7. Clean up persistent transition objects
+        // 8. Clean up
         // -------------------------------------------------
 
         if (canvasRoot != null &&

@@ -15,6 +15,13 @@ public class ArchiveMemoryTransition : MonoBehaviour
     public float holdWhiteDuration = 0.2f;
     public float whiteFadeOutDuration = 1.5f;
 
+    [Header("Destination Intro Hold")]
+    [Tooltip("Only this destination scene will hold on full white after loading.")]
+    public string postLoadHoldSceneName = "Scene_Hospital";
+
+    [Tooltip("How long to remain fully white after the destination scene loads.")]
+    public float postLoadWhiteHoldDuration = 2.2f;
+
     private bool transitionStarted = false;
     private string sceneToLoad;
 
@@ -52,7 +59,9 @@ public class ArchiveMemoryTransition : MonoBehaviour
         sceneToLoad = targetScene;
         transitionStarted = true;
 
-        StartCoroutine(TransitionSequence());
+        StartCoroutine(
+            TransitionSequence()
+        );
     }
 
     private IEnumerator TransitionSequence()
@@ -63,7 +72,8 @@ public class ArchiveMemoryTransition : MonoBehaviour
 
         if (whiteScreen != null)
         {
-            canvasRoot = whiteScreen.transform.root.gameObject;
+            canvasRoot =
+                whiteScreen.transform.root.gameObject;
 
             if (canvasRoot != gameObject)
             {
@@ -72,12 +82,19 @@ public class ArchiveMemoryTransition : MonoBehaviour
         }
 
         if (blackScreen != null)
+        {
             blackScreen.blocksRaycasts = true;
+        }
 
         if (whiteScreen != null)
+        {
             whiteScreen.blocksRaycasts = true;
+        }
 
+        // -------------------------------------------------
         // 1. Archive fades to black
+        // -------------------------------------------------
+
         if (blackScreen != null)
         {
             yield return StartCoroutine(
@@ -90,7 +107,10 @@ public class ArchiveMemoryTransition : MonoBehaviour
             );
         }
 
+        // -------------------------------------------------
         // 2. Brief full-black pause
+        // -------------------------------------------------
+
         if (holdBlackDuration > 0f)
         {
             yield return new WaitForSeconds(
@@ -98,7 +118,10 @@ public class ArchiveMemoryTransition : MonoBehaviour
             );
         }
 
+        // -------------------------------------------------
         // 3. White gradually covers the black
+        // -------------------------------------------------
+
         if (whiteScreen != null)
         {
             yield return StartCoroutine(
@@ -111,14 +134,15 @@ public class ArchiveMemoryTransition : MonoBehaviour
             );
         }
 
-        // White now completely hides the black,
-        // so black can safely disappear underneath.
         if (blackScreen != null)
         {
             blackScreen.alpha = 0f;
         }
 
-        // 4. Brief full-white pause
+        // -------------------------------------------------
+        // 4. Brief full-white pause BEFORE load
+        // -------------------------------------------------
+
         if (holdWhiteDuration > 0f)
         {
             yield return new WaitForSeconds(
@@ -126,12 +150,41 @@ public class ArchiveMemoryTransition : MonoBehaviour
             );
         }
 
+        // -------------------------------------------------
         // 5. Load first Memory Scene
-        SceneManager.LoadScene(sceneToLoad);
+        // -------------------------------------------------
 
+        SceneManager.LoadScene(
+            sceneToLoad
+        );
+
+        // Destination scene initialises here.
+        // Hospital Intro can begin with Play On Awake.
         yield return null;
 
-        // 6. White fades away in the new scene
+        // -------------------------------------------------
+        // 6. SPECIAL POST-LOAD WHITE HOLD
+        // -------------------------------------------------
+
+        if (
+            postLoadWhiteHoldDuration > 0f &&
+            sceneToLoad == postLoadHoldSceneName
+        )
+        {
+            Debug.Log(
+                "ARCHIVE TRANSITION HOLDING WHITE FOR INTRO → "
+                + sceneToLoad
+            );
+
+            yield return new WaitForSeconds(
+                postLoadWhiteHoldDuration
+            );
+        }
+
+        // -------------------------------------------------
+        // 7. White fades away in destination scene
+        // -------------------------------------------------
+
         if (whiteScreen != null)
         {
             yield return StartCoroutine(
@@ -151,7 +204,10 @@ public class ArchiveMemoryTransition : MonoBehaviour
             blackScreen.blocksRaycasts = false;
         }
 
-        // 7. Clean up persistent transition objects
+        // -------------------------------------------------
+        // 8. Clean up
+        // -------------------------------------------------
+
         if (canvasRoot != null &&
             canvasRoot != gameObject)
         {
@@ -187,17 +243,19 @@ public class ArchiveMemoryTransition : MonoBehaviour
                 timer / duration
             );
 
-            float smoothT = Mathf.SmoothStep(
-                0f,
-                1f,
-                t
-            );
+            float smoothT =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
 
-            canvasGroup.alpha = Mathf.Lerp(
-                from,
-                to,
-                smoothT
-            );
+            canvasGroup.alpha =
+                Mathf.Lerp(
+                    from,
+                    to,
+                    smoothT
+                );
 
             yield return null;
         }
