@@ -40031,6 +40031,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sisters' photo
       objectReference: {fileID: 0}
+    - target: {fileID: 3473554162940436701, guid: f1296c126dd740f4b9d4f6c9cfbb99f2, type: 3}
+      propertyPath: m_Name
+      value: Sisters' Photo
+      objectReference: {fileID: 0}
     - target: {fileID: 8080351918461604336, guid: f1296c126dd740f4b9d4f6c9cfbb99f2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.008900166

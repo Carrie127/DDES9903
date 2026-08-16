@@ -97650,6 +97650,8 @@ MonoBehaviour:
   fadeInDuration: 1.5
   holdWhiteDuration: 0.3
   fadeOutDuration: 1.5
+  postLoadHoldSceneName: Scene_Hospital
+  postLoadWhiteHoldDuration: 2.2
 --- !u!4 &1649549245
 Transform:
   m_ObjectHideFlags: 0
