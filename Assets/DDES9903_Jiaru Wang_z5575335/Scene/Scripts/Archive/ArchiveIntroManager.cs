@@ -29,13 +29,55 @@ public class ArchiveIntroManager : MonoBehaviour
     public float interactionDelayAfterAudio = 0.15f;
 
     private Coroutine introCoroutine;
+    private bool isRejectEnding = false;
 
     private void Awake()
     {
-        /*
-         * Awake比Start更早执行。
-         * 先关闭线索点击，避免场景刚加载的一瞬间触发Evidence。
-         */
+        // -------------------------------------------------
+        // Check whether Archive was entered through REJECT.
+        // -------------------------------------------------
+
+        isRejectEnding = FinalEndingState.IsReject();
+
+        // =================================================
+        // REJECT ENDING:
+        // Skip normal Archive intro completely.
+        // =================================================
+
+        if (isRejectEnding)
+        {
+            // Reject Archive must NOT replay the normal intro voice.
+            if (introVoiceAudio != null)
+            {
+                introVoiceAudio.Stop();
+            }
+
+            // Keep normal Archive evidence interaction disabled.
+            // ArchiveRejectMode will also disable individual clue
+            // interaction components.
+            if (clickManager != null)
+            {
+                clickManager.enabled = false;
+            }
+
+            // Remove Archive's own black intro screens immediately.
+            // The white MemorySceneTransition already handles the
+            // transition into Archive.
+            SetFadeAlpha(0f);
+            DisableTransparentFadeImages();
+
+            Debug.Log(
+                "ARCHIVE INTRO → SKIPPED FOR REJECT ENDING"
+            );
+
+            return;
+        }
+
+        // =================================================
+        // NORMAL ARCHIVE ENTRY
+        // Original intro behaviour stays unchanged.
+        // =================================================
+
         if (clickManager != null)
         {
             clickManager.enabled = false;
@@ -49,15 +91,22 @@ public class ArchiveIntroManager : MonoBehaviour
 
     private void Start()
     {
-        introCoroutine = StartCoroutine(PlayArchiveIntro());
+        // Reject Ending does not run normal Archive intro.
+        if (isRejectEnding)
+            return;
+
+        introCoroutine =
+            StartCoroutine(PlayArchiveIntro());
     }
 
     private IEnumerator PlayArchiveIntro()
     {
         /*
-         * 进入Archive时，旁白与渐亮同时开始。
+         * 正常进入Archive时：
+         * 旁白与渐亮同时开始。
          * 玩家移动和视角始终不受限制。
          */
+
         if (introVoiceAudio != null)
         {
             introVoiceAudio.Stop();
@@ -74,9 +123,8 @@ public class ArchiveIntroManager : MonoBehaviour
 
         /*
          * 等待短旁白播放结束。
-         * Unity 6.3使用Audio Generator时，
-         * 直接通过isPlaying判断，不检查旧版clip字段。
          */
+
         if (introVoiceAudio != null)
         {
             while (introVoiceAudio.isPlaying)
@@ -109,9 +157,7 @@ public class ArchiveIntroManager : MonoBehaviour
 
         fadeImage.gameObject.SetActive(true);
 
-        /*
-         * 防止黑色Image拦截桌面鼠标或VR射线。
-         */
+        // 防止黑色Image拦截桌面鼠标或VR射线。
         fadeImage.raycastTarget = false;
     }
 
@@ -136,15 +182,17 @@ public class ArchiveIntroManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float progress = Mathf.Clamp01(
-                elapsedTime / duration
-            );
+            float progress =
+                Mathf.Clamp01(
+                    elapsedTime / duration
+                );
 
-            float currentAlpha = Mathf.Lerp(
-                startAlpha,
-                endAlpha,
-                progress
-            );
+            float currentAlpha =
+                Mathf.Lerp(
+                    startAlpha,
+                    endAlpha,
+                    progress
+                );
 
             SetFadeAlpha(currentAlpha);
 
@@ -156,8 +204,15 @@ public class ArchiveIntroManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
-        SetImageAlpha(desktopBlackScreen, alpha);
-        SetImageAlpha(vrBlackScreen, alpha);
+        SetImageAlpha(
+            desktopBlackScreen,
+            alpha
+        );
+
+        SetImageAlpha(
+            vrBlackScreen,
+            alpha
+        );
     }
 
     private void SetImageAlpha(
@@ -169,7 +224,10 @@ public class ArchiveIntroManager : MonoBehaviour
             return;
 
         Color colour = fadeImage.color;
-        colour.a = Mathf.Clamp01(alpha);
+
+        colour.a =
+            Mathf.Clamp01(alpha);
+
         fadeImage.color = colour;
     }
 
@@ -203,17 +261,16 @@ public class ArchiveIntroManager : MonoBehaviour
 
     private void OnDisable()
     {
-        /*
-         * 防止物体在Intro中途被关闭时，
-         * NarrativeClickManager永久保持Disabled。
-         */
         if (introCoroutine != null)
         {
             StopCoroutine(introCoroutine);
             introCoroutine = null;
         }
 
-        if (clickManager != null)
+        // IMPORTANT:
+        // Reject Ending must never restore normal interaction.
+        if (!isRejectEnding &&
+            clickManager != null)
         {
             clickManager.enabled = true;
         }

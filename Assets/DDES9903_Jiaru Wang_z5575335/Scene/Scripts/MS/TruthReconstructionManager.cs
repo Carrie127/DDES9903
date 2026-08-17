@@ -3,13 +3,30 @@ using UnityEngine;
 
 public class TruthReconstructionManager : MonoBehaviour
 {
-    [Header("Memory 01")]
-    [SerializeField] private GameObject memoryImage01;
-    [SerializeField] private GameObject memoryInteractArea01;
+    [Header("Memory Sequence")]
+    [SerializeField] private GameObject[] memoryImages;
+    [SerializeField] private GameObject[] memoryInteractAreas;
 
-    [Header("Memory 02")]
-    [SerializeField] private GameObject memoryImage02;
-    [SerializeField] private GameObject memoryInteractArea02;
+    [Header("Memory Audio")]
+    [SerializeField] private AudioSource fireAmbience;
+    [SerializeField] private AudioSource[] memoryAudios;
+
+    [Header("Memory 04")]
+    [SerializeField] private AudioSource memory04Collapse;
+    [SerializeField] private float collapseDelay = 2f;
+
+    [Header("Mia Truth")]
+    [SerializeField] private AudioSource miaTruth;
+    [SerializeField] private float fireFadeDuration = 1.2f;
+    [SerializeField] private float miaStartDelay = 0.4f;
+
+    [Header("Present Evie")]
+    [SerializeField] private AudioSource presentEvieTruth;
+    [SerializeField] private float presentEvieDelayAfterMia = 1.3f;
+
+    [Header("Final Choice")]
+    [SerializeField] private TRFinalChoiceController finalChoiceController;
+    [SerializeField] private float finalChoiceDelayAfterEvie = 0.8f;
 
     [Header("Timing")]
     [SerializeField] private float firstMemoryDelay = 0.5f;
@@ -17,26 +34,42 @@ public class TruthReconstructionManager : MonoBehaviour
     [SerializeField] private float interactionEnableDelay = 1.25f;
 
     private bool hasStarted = false;
-    private bool memory02Revealed = false;
+    private bool isRevealing = false;
+    private int currentMemoryIndex = -1;
 
     private void Awake()
     {
-        // Memory 01
-        if (memoryImage01 != null)
-            memoryImage01.SetActive(false);
+        foreach (GameObject image in memoryImages)
+        {
+            if (image != null)
+                image.SetActive(false);
+        }
 
-        if (memoryInteractArea01 != null)
-            memoryInteractArea01.SetActive(false);
+        foreach (GameObject area in memoryInteractAreas)
+        {
+            if (area != null)
+                area.SetActive(false);
+        }
 
-        // Memory 02
-        if (memoryImage02 != null)
-            memoryImage02.SetActive(false);
+        if (fireAmbience != null)
+            fireAmbience.Stop();
 
-        if (memoryInteractArea02 != null)
-            memoryInteractArea02.SetActive(false);
+        if (memory04Collapse != null)
+            memory04Collapse.Stop();
+
+        if (miaTruth != null)
+            miaTruth.Stop();
+
+        if (presentEvieTruth != null)
+            presentEvieTruth.Stop();
+
+        foreach (AudioSource audio in memoryAudios)
+        {
+            if (audio != null)
+                audio.Stop();
+        }
     }
 
-    // Called by Touch 7:42
     public void BeginTruthReconstruction()
     {
         if (hasStarted)
@@ -46,69 +79,201 @@ public class TruthReconstructionManager : MonoBehaviour
 
         Debug.Log("TRUTH RECONSTRUCTION → STARTED");
 
-        StartCoroutine(RevealMemory01Sequence());
-    }
-
-    private IEnumerator RevealMemory01Sequence()
-    {
-        yield return new WaitForSeconds(firstMemoryDelay);
-
-        if (memoryImage01 != null)
+        if (fireAmbience != null)
         {
-            memoryImage01.SetActive(true);
-
-            TRMemoryImageFade fade =
-                memoryImage01.GetComponent<TRMemoryImageFade>();
-
-            if (fade != null)
-                fade.PlayReveal();
-
-            Debug.Log("TRUTH RECONSTRUCTION → MEMORY 01 REVEALED");
+            fireAmbience.loop = true;
+            fireAmbience.Play();
         }
 
-        // 等淡入基本完成后，才允许 Recall
-        yield return new WaitForSeconds(interactionEnableDelay);
-
-        if (memoryInteractArea01 != null)
-            memoryInteractArea01.SetActive(true);
+        StartCoroutine(RevealNextMemory(firstMemoryDelay));
     }
 
-    // Called by Recall on Memory 01
-    public void RevealMemory02()
+    public void AdvanceMemory()
     {
-        if (!hasStarted || memory02Revealed)
+        if (!hasStarted || isRevealing)
             return;
 
-        memory02Revealed = true;
+        if (currentMemoryIndex >= 0 &&
+            currentMemoryIndex < memoryInteractAreas.Length &&
+            memoryInteractAreas[currentMemoryIndex] != null)
+        {
+            memoryInteractAreas[currentMemoryIndex].SetActive(false);
+        }
 
-        // Memory 01 已经被 Recall，不再允许重复点击
-        if (memoryInteractArea01 != null)
-            memoryInteractArea01.SetActive(false);
+        if (currentMemoryIndex >= memoryImages.Length - 1)
+        {
+            Debug.Log(
+                "TRUTH RECONSTRUCTION → ALL MISSING MEMORIES REVEALED"
+            );
 
-        StartCoroutine(RevealMemory02Sequence());
+            StartCoroutine(FinishTruthReconstruction());
+            return;
+        }
+
+        StartCoroutine(RevealNextMemory(nextMemoryDelay));
     }
 
-    private IEnumerator RevealMemory02Sequence()
+    private IEnumerator RevealNextMemory(float delay)
     {
-        yield return new WaitForSeconds(nextMemoryDelay);
+        isRevealing = true;
 
-        if (memoryImage02 != null)
+        yield return new WaitForSeconds(delay);
+
+        currentMemoryIndex++;
+
+        if (currentMemoryIndex >= memoryImages.Length)
         {
-            memoryImage02.SetActive(true);
+            isRevealing = false;
+            yield break;
+        }
+
+        GameObject image = memoryImages[currentMemoryIndex];
+
+        if (image != null)
+        {
+            image.SetActive(true);
 
             TRMemoryImageFade fade =
-                memoryImage02.GetComponent<TRMemoryImageFade>();
+                image.GetComponent<TRMemoryImageFade>();
 
             if (fade != null)
                 fade.PlayReveal();
 
-            Debug.Log("TRUTH RECONSTRUCTION → MEMORY 02 REVEALED");
+            Debug.Log(
+                "TRUTH RECONSTRUCTION → MEMORY " +
+                (currentMemoryIndex + 1) +
+                " REVEALED"
+            );
         }
 
-        // 等 Image 02 浮现完成，再开启它自己的 Recall
-        yield return new WaitForSeconds(interactionEnableDelay);
+        if (currentMemoryIndex < memoryAudios.Length &&
+            memoryAudios[currentMemoryIndex] != null)
+        {
+            memoryAudios[currentMemoryIndex].Play();
+        }
 
-        if (memoryInteractArea02 != null)
-            memoryInteractArea02.SetActive(true);
+        if (currentMemoryIndex == memoryImages.Length - 1 &&
+            memory04Collapse != null)
+        {
+            memory04Collapse.PlayDelayed(collapseDelay);
+        }
+
+        float waitTime = GetInteractionDelay(currentMemoryIndex);
+
+        yield return new WaitForSeconds(waitTime);
+
+        if (currentMemoryIndex < memoryInteractAreas.Length &&
+            memoryInteractAreas[currentMemoryIndex] != null)
+        {
+            memoryInteractAreas[currentMemoryIndex].SetActive(true);
+        }
+
+        isRevealing = false;
+    }
+
+    private float GetInteractionDelay(int index)
+    {
+        float delay = interactionEnableDelay;
+
+        if (index < memoryAudios.Length &&
+            memoryAudios[index] != null &&
+            memoryAudios[index].clip != null)
+        {
+            delay = Mathf.Max(
+                delay,
+                memoryAudios[index].clip.length
+            );
+        }
+
+        if (index == memoryImages.Length - 1 &&
+            memory04Collapse != null &&
+            memory04Collapse.clip != null)
+        {
+            delay = Mathf.Max(
+                delay,
+                collapseDelay + memory04Collapse.clip.length
+            );
+        }
+
+        return delay;
+    }
+
+    private IEnumerator FinishTruthReconstruction()
+    {
+        isRevealing = true;
+
+        // 1. 火场环境声渐弱
+        if (fireAmbience != null && fireAmbience.isPlaying)
+        {
+            float startVolume = fireAmbience.volume;
+            float elapsed = 0f;
+
+            while (elapsed < fireFadeDuration)
+            {
+                elapsed += Time.deltaTime;
+
+                float t = Mathf.Clamp01(
+                    elapsed / fireFadeDuration
+                );
+
+                fireAmbience.volume =
+                    Mathf.Lerp(startVolume, 0f, t);
+
+                yield return null;
+            }
+
+            fireAmbience.Stop();
+            fireAmbience.volume = startVolume;
+        }
+
+        // 2. Mia Truth
+        yield return new WaitForSeconds(miaStartDelay);
+
+        if (miaTruth != null)
+        {
+            miaTruth.Play();
+
+            Debug.Log(
+                "TRUTH RECONSTRUCTION → MIA TRUTH"
+            );
+
+            while (miaTruth.isPlaying)
+                yield return null;
+        }
+
+        // 3. Mia 说完后停顿
+        yield return new WaitForSeconds(
+            presentEvieDelayAfterMia
+        );
+
+        // 4. Present Evie 回应
+        if (presentEvieTruth != null)
+        {
+            presentEvieTruth.Play();
+
+            Debug.Log(
+                "TRUTH RECONSTRUCTION → PRESENT EVIE TRUTH"
+            );
+
+            while (presentEvieTruth.isPlaying)
+                yield return null;
+        }
+
+        // 5. Evie 说完后再停一下
+        yield return new WaitForSeconds(
+            finalChoiceDelayAfterEvie
+        );
+
+        // 6. Final Choice
+        if (finalChoiceController != null)
+        {
+            finalChoiceController.BeginFinalChoiceSequence();
+
+            Debug.Log(
+                "TRUTH RECONSTRUCTION → FINAL CHOICE"
+            );
+        }
+
+        isRevealing = false;
     }
 }
