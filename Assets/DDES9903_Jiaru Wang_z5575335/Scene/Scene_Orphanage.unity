@@ -8650,6 +8650,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 404429768}
+        m_TargetAssemblyTypeName: SequentialClueGate, Assembly-CSharp
+        m_MethodName: Unlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &327266105
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11020,6 +11032,7 @@ GameObject:
   - component: {fileID: 404429766}
   - component: {fileID: 404429765}
   - component: {fileID: 404429767}
+  - component: {fileID: 404429768}
   m_Layer: 0
   m_Name: SistersPhoto_Reveal
   m_TagString: Untagged
@@ -11108,6 +11121,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 489089813}
+        m_TargetAssemblyTypeName: SequentialClueGate, Assembly-CSharp
+        m_MethodName: Unlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPrimaryInteractLift:
     m_PersistentCalls:
       m_Calls: []
@@ -11147,6 +11172,24 @@ MonoBehaviour:
   onHoverExitBackground:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &404429768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404429763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d717cced3fd29438f19fcbe1809703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequentialClueGate
+  unlockedAtStart: 0
+  interactionColliders:
+  - {fileID: 404429766}
+  interactionScripts:
+  - {fileID: 404429767}
+  guideObjects: []
 --- !u!1001 &404492632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13094,6 +13137,7 @@ GameObject:
   - component: {fileID: 489089812}
   - component: {fileID: 489089811}
   - component: {fileID: 489089810}
+  - component: {fileID: 489089813}
   m_Layer: 0
   m_Name: Clock_Interactable
   m_TagString: Untagged
@@ -13239,6 +13283,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.9858599, z: 1.9240453}
   m_Center: {x: 0, y: 0.13785982, z: 0.085391164}
+--- !u!114 &489089813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489089808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d717cced3fd29438f19fcbe1809703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequentialClueGate
+  unlockedAtStart: 0
+  interactionColliders:
+  - {fileID: 489089812}
+  interactionScripts:
+  - {fileID: 489089810}
+  guideObjects: []
 --- !u!1 &498574322
 GameObject:
   m_ObjectHideFlags: 0
@@ -27378,6 +27440,7 @@ GameObject:
   - component: {fileID: 1015774363}
   - component: {fileID: 1015774362}
   - component: {fileID: 1015774361}
+  - component: {fileID: 1015774365}
   m_Layer: 0
   m_Name: ChildDrawing_Holdable
   m_TagString: MemoryObject
@@ -27557,6 +27620,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5931978, y: 0.099657774, z: 0.51104736}
   m_Center: {x: -0.025301456, y: 0.006339669, z: -0.017349243}
+--- !u!114 &1015774365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015774359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d717cced3fd29438f19fcbe1809703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequentialClueGate
+  unlockedAtStart: 0
+  interactionColliders:
+  - {fileID: 1015774364}
+  interactionScripts:
+  - {fileID: 1015774362}
+  guideObjects:
+  - {fileID: 0}
 --- !u!1001 &1016978706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40261,6 +40343,18 @@ MonoBehaviour:
       - m_Target: {fileID: 541701675}
         m_TargetAssemblyTypeName: DrawingMemoryAudio, Assembly-CSharp
         m_MethodName: StartDrawingStage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1015774365}
+        m_TargetAssemblyTypeName: SequentialClueGate, Assembly-CSharp
+        m_MethodName: Unlock
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -53615,6 +53709,7 @@ GameObject:
   - component: {fileID: 2033036164}
   - component: {fileID: 2033036163}
   - component: {fileID: 2033036166}
+  - component: {fileID: 2033036167}
   m_Layer: 0
   m_Name: Teddy_Holdable
   m_TagString: MemoryObject
@@ -53794,6 +53889,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2033036167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033036161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d717cced3fd29438f19fcbe1809703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequentialClueGate
+  unlockedAtStart: 1
+  interactionColliders:
+  - {fileID: 2033036165}
+  interactionScripts:
+  - {fileID: 2033036163}
+  - {fileID: 2033036166}
+  guideObjects: []
 --- !u!1001 &2033696526
 PrefabInstance:
   m_ObjectHideFlags: 0
